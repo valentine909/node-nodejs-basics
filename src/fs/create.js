@@ -1,25 +1,20 @@
 import fs from "fs/promises";
 import path from "path";
+import { isExists, fsError } from "./helper.js";
+
+const settings = {
+  folder: "files",
+  file: "fresh.txt",
+  message: "I am fresh and young",
+};
 
 export const create = async () => {
   const __dirname = path.resolve();
-  const file = path.resolve(__dirname, "files", "fresh.txt");
+  const file = path.resolve(__dirname, settings.folder, settings.file);
   if (await isExists(file)) {
-    throw new Error("FS operation failed");
+    throw fsError;
   } else {
-    await fs.writeFile(
-      path.resolve(__dirname, "files", "fresh.txt"),
-      "I am fresh and young"
-    );
-  }
-};
-
-export const isExists = async (path) => {
-  try {
-    await fs.access(path);
-    return true;
-  } catch {
-    return false;
+    await fs.writeFile(file, settings.message);
   }
 };
 
