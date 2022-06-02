@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import { isExists, fsError } from "./helper.js";
+import { exists, fsError } from "./helper.js";
 
 const settings = {
   folder: "files",
@@ -11,7 +11,7 @@ const settings = {
 export const create = async () => {
   const __dirname = path.resolve();
   const file = path.resolve(__dirname, settings.folder, settings.file);
-  if (await isExists(file)) {
+  if (await exists(file)) {
     throw fsError;
   } else {
     await fs.writeFile(file, settings.message);

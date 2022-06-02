@@ -1,5 +1,5 @@
 import fs from "fs/promises";
-import { fsError, isExists } from "./helper.js";
+import { fsError, exists } from "./helper.js";
 import path from "path";
 
 const settings = {
@@ -10,7 +10,7 @@ const settings = {
 export const remove = async () => {
   const __dirname = path.resolve();
   const file = path.resolve(__dirname, settings.folder, settings.filename);
-  if (!(await isExists(file))) {
+  if (!(await exists(file))) {
     throw fsError;
   } else {
     await fs.rm(file);

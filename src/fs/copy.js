@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import { fsError, isExists } from "./helper.js";
+import { fsError, exists } from "./helper.js";
 
 const settings = {
   source: "files",
@@ -11,7 +11,7 @@ export const copy = async () => {
   const __dirname = path.resolve();
   const src = path.resolve(__dirname, settings.source);
   const dest = path.resolve(__dirname, settings.destination);
-  if (await isExists(dest)) {
+  if ((await exists(dest)) || !(await exists(src))) {
     throw fsError;
   } else {
     await recursiveFilesCopy(src, dest);
