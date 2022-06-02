@@ -1,6 +1,6 @@
-import fs from "fs/promises";
-import { fsError, exists } from "./helper.js";
-import path from "path";
+import { rm } from "fs/promises";
+import { fsError, exists, _dirname } from "./helper.js";
+import { resolve } from "path";
 
 const settings = {
   folder: "files",
@@ -8,12 +8,11 @@ const settings = {
 };
 
 export const remove = async () => {
-  const __dirname = path.resolve();
-  const file = path.resolve(__dirname, settings.folder, settings.filename);
+  const file = resolve(_dirname, settings.folder, settings.filename);
   if (!(await exists(file))) {
     throw fsError;
   } else {
-    await fs.rm(file);
+    await rm(file);
   }
 };
 

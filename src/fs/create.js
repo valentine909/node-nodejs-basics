@@ -1,6 +1,6 @@
-import fs from "fs/promises";
-import path from "path";
-import { exists, fsError } from "./helper.js";
+import { writeFile } from "fs/promises";
+import { resolve } from "path";
+import { exists, fsError, _dirname } from "./helper.js";
 
 const settings = {
   folder: "files",
@@ -9,12 +9,11 @@ const settings = {
 };
 
 export const create = async () => {
-  const __dirname = path.resolve();
-  const file = path.resolve(__dirname, settings.folder, settings.file);
+  const file = resolve(_dirname, settings.folder, settings.file);
   if (await exists(file)) {
     throw fsError;
   } else {
-    await fs.writeFile(file, settings.message);
+    await writeFile(file, settings.message);
   }
 };
 

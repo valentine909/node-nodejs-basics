@@ -1,16 +1,15 @@
-import fs from "fs/promises";
-import { fsError, exists } from "./helper.js";
-import path from "path";
+import { readdir } from "fs/promises";
+import { fsError, exists, _dirname } from "./helper.js";
+import { resolve } from "path";
 
 const settings = {
   folder: "files",
 };
 
 export const list = async () => {
-  const __dirname = path.resolve();
-  const folder = path.resolve(__dirname, settings.folder);
+  const folder = resolve(_dirname, settings.folder);
   if (await exists(folder)) {
-    const files = await fs.readdir(folder, { withFileTypes: true });
+    const files = await readdir(folder, { withFileTypes: true });
     files.map((file) => console.log(file.name));
   } else {
     throw fsError;

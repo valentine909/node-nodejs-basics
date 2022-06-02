@@ -1,6 +1,6 @@
-import fs from "fs/promises";
-import path from "path";
-import { fsError, exists } from "./helper.js";
+import { rename as fsRename } from "fs/promises";
+import { resolve } from "path";
+import { fsError, exists, _dirname } from "./helper.js";
 
 const settings = {
   folder: "files",
@@ -9,11 +9,10 @@ const settings = {
 };
 
 export const rename = async () => {
-  const __dirname = path.resolve();
-  const file = path.resolve(__dirname, settings.folder, settings.file);
-  const renamed = path.resolve(__dirname, settings.folder, settings.newName);
+  const file = resolve(_dirname, settings.folder, settings.file);
+  const renamed = resolve(_dirname, settings.folder, settings.newName);
   if ((await exists(file)) && !(await exists(renamed))) {
-    await fs.rename(file, renamed);
+    await fsRename(file, renamed);
   } else {
     throw fsError;
   }

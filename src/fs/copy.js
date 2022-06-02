@@ -1,6 +1,6 @@
-import fs from "fs/promises";
-import path from "path";
-import { fsError, exists } from "./helper.js";
+import { copyFile, mkdir, readdir } from "fs/promises";
+import { resolve } from "path";
+import { fsError, exists, _dirname } from "./helper.js";
 
 const settings = {
   source: "files",
@@ -8,9 +8,8 @@ const settings = {
 };
 
 export const copy = async () => {
-  const __dirname = path.resolve();
-  const src = path.resolve(__dirname, settings.source);
-  const dest = path.resolve(__dirname, settings.destination);
+  const src = resolve(_dirname, settings.source);
+  const dest = resolve(_dirname, settings.destination);
   if ((await exists(dest)) || !(await exists(src))) {
     throw fsError;
   } else {
@@ -19,15 +18,15 @@ export const copy = async () => {
 };
 
 const recursiveFilesCopy = async (src, dest) => {
-  await fs.mkdir(dest, { recursive: true });
-  const files = await fs.readdir(src, { withFileTypes: true });
+  await mkdir(dest, { recursive: true });
+  const files = await readdir(src, { withFileTypes: true });
   for (const file of files) {
-    const newSrc = path.resolve(src, file.name);
-    const newDest = path.resolve(dest, file.name);
+    const newSrc = resolve(src, file.name);
+    const newDest = resolve(dest, file.name);
     if (file.isDirectory()) {
       await recursiveFilesCopy(newSrc, newDest);
     } else {
-      await fs.copyFile(newSrc, newDest);
+      await copyFile(newSrc, newDest);
     }
   }
 };
