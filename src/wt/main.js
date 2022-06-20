@@ -19,9 +19,10 @@ export const performCalculations = async () => {
       });
       worker.on("error", () => reject({ status: "error" }));
     });
+    promise.catch(()=>{});
     workers.push(promise);
   }
-  return Promise.all(workers);
+  return Promise.allSettled(workers);
 };
 
 console.log(await performCalculations().then());
