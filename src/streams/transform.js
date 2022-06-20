@@ -1,12 +1,10 @@
 import { stdin, stdout } from "process";
+import { Transform } from "stream";
 
-export const transform = async () => {
-  stdin.on("readable", () => {
-    const chunk = stdin.read();
-    if (chunk) {
-      stdout.write(chunk.reverse());
-    }
-  });
-};
+export const transformReverse = new Transform({
+  transform(chunk, encording, callback) {
+    callback(null, chunk.reverse() + '\n');
+  },
+});
 
-transform().then();
+stdin.pipe(transformReverse).pipe(stdout)
